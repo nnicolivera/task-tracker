@@ -2,7 +2,7 @@ import Button from '../components/Button'
 import { useSelector } from 'react-redux'
 
 export default function Header({ title, onAdd, showAdd }) {
-  const themeColor = useSelector((state) => state.color)
+  const themeColor = useSelector(state => state.color)
 
   return (
     <header className='header' style={{ color: themeColor }}>

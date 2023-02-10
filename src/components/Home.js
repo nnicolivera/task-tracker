@@ -5,11 +5,10 @@ import taskService from '../services/tasks'
 import Header from '../components/Header'
 import ChangeColor from './ChangeColor'
 import { useDispatch, useSelector } from 'react-redux'
-import { setList, addItem, delItem } from '../actions'
+import { getList, addItem, delItem, updItem } from '../actions'
 
 export default function Home() {
     const [showAddTask, setShowAddTask] = useState(false)
-    const [tasks, setTasks] = useState([])
 
     const dispatch = useDispatch()
     const items = useSelector(state => state.items)
@@ -18,7 +17,7 @@ export default function Home() {
         taskService
             .getAll()
             .then(initialTasks => {
-                dispatch(setList(initialTasks))
+                dispatch(getList(initialTasks))
             })
     }, [items])
 
@@ -49,10 +48,12 @@ export default function Home() {
                     ...taskToToggle,
                     reminder: !taskToToggle.reminder
                 }
+
                 taskService
                     .update(id, updTask)
                     .then(() => {
-                        setTasks(tasks.map(task => task.id === id ? { ...task, reminder: !task.reminder } : task))
+                        dispatch(updItem(id));
+                        // setTasks(tasks.map(task => task.id === id ? { ...task, reminder: !task.reminder } : task))
                     })
             })
     }

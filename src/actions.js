@@ -4,8 +4,12 @@ export const changeColor = color => {
     return { type: actions.SET_COLOR, payload: color };
 }
 
-export const setList = items => {
-    return { type: actions.SET_LIST, payload: items };
+export const getList = items => {
+    return { type: actions.GET_LIST, payload: items };
+}
+
+export const getItem = id => {
+    return { type: actions.GET_ITEM, payload: id };
 }
 
 export const resetList = () => {
@@ -18,4 +22,8 @@ export const addItem = item => {
 
 export const delItem = id => {
     return { type: actions.DEL_ITEM, payload: id };
+}
+
+export const updItem = id => {
+    return { type: actions.UPD_ITEM, payload: id };
 }

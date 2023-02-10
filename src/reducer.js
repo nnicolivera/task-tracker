@@ -7,10 +7,14 @@ export default function reducer(state = { items: [] }, action) {
                 ...state,
                 color: action.payload
             };
-        case actions.SET_LIST:
+        case actions.GET_LIST:
             return {
                 ...state.items,
                 items: action.payload
+            };
+        case actions.GET_ITEM:
+            return {
+                items: [...state.items, state.items.filter(item => item.id === action.payload)]
             };
         case actions.ADD_ITEM:
             return {
@@ -19,6 +23,18 @@ export default function reducer(state = { items: [] }, action) {
         case actions.DEL_ITEM:
             return {
                 items: [...state.items, state.items.filter(item => item.id !== action.payload)]
+            };
+        case actions.UPD_ITEM:
+            return {
+                items: [
+                    ...state.items,
+                    state.items.map(item => item.id === action.id ?
+                        // transform the one with a matching id
+                        { ...item, reminder: action.reminder } :
+                        // otherwise return original item
+                        item
+                    )
+                ],
             };
         case actions.RESET_LIST:
             return {
