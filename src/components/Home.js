@@ -4,17 +4,22 @@ import AddTask from '../components/AddTask'
 import taskService from '../services/tasks'
 import Header from '../components/Header'
 import ChangeColor from './ChangeColor'
+import { useDispatch, useSelector } from 'react-redux'
+import { setList, addItem } from '../actions'
 
 export default function Home() {
     const [showAddTask, setShowAddTask] = useState(false)
-
     const [tasks, setTasks] = useState([])
+
+    const dispatch = useDispatch()
+    const items = useSelector(state => state.items)
+    console.log(items);
 
     useEffect(() => {
         taskService
             .getAll()
             .then(initialTasks => {
-                setTasks(initialTasks)
+                dispatch(setList(initialTasks))
             })
     }, [])
 
@@ -23,7 +28,7 @@ export default function Home() {
         taskService
             .add(task)
             .then(newTask => {
-                setTasks(tasks.concat(newTask))
+                dispatch(addItem(newTask))
             })
     }
 
@@ -57,7 +62,7 @@ export default function Home() {
         <>
             <Header title='Task Tracker' onAdd={() => setShowAddTask(!showAddTask)} showAdd={showAddTask} />
             {showAddTask && <AddTask onAdd={addTask} />}
-            {tasks.length > 0 ? <Tasks tasks={tasks} onToggle={toggleReminder} onDelete={deleteTask} /> : 'No tasks to show'}
+            {items.length > 0 ? <Tasks tasks={items} onToggle={toggleReminder} onDelete={deleteTask} /> : 'No tasks to show'}
             <ChangeColor />
         </>
     )
