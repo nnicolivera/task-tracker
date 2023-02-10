@@ -5,7 +5,7 @@ import taskService from '../services/tasks'
 import Header from '../components/Header'
 import ChangeColor from './ChangeColor'
 import { useDispatch, useSelector } from 'react-redux'
-import { setList, addItem } from '../actions'
+import { setList, addItem, delItem } from '../actions'
 
 export default function Home() {
     const [showAddTask, setShowAddTask] = useState(false)
@@ -13,7 +13,6 @@ export default function Home() {
 
     const dispatch = useDispatch()
     const items = useSelector(state => state.items)
-    console.log(items);
 
     useEffect(() => {
         taskService
@@ -21,7 +20,7 @@ export default function Home() {
             .then(initialTasks => {
                 dispatch(setList(initialTasks))
             })
-    }, [])
+    }, [items])
 
     // Add Task
     const addTask = (task) => {
@@ -35,9 +34,9 @@ export default function Home() {
     // Delete tasks
     const deleteTask = (id) => {
         taskService
-            .remove(id, tasks)
+            .remove(id, items)
             .then(() => {
-                setTasks(tasks.filter((task) => task.id !== id))
+                dispatch(delItem(id));
             })
     }
 
