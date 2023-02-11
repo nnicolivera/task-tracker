@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react'
-import Tasks from '../components/Tasks'
-import AddTask from '../components/AddTask'
-import taskService from '../services/tasks'
-import Header from '../components/Header'
-import ChangeColor from './ChangeColor'
-import { useDispatch, useSelector } from 'react-redux'
-import { getList, addItem, delItem, updItem } from '../actions'
+import { useState, useEffect } from 'react';
+import Tasks from '../components/Tasks';
+import AddTask from '../components/AddTask';
+import taskService from '../services/tasks';
+import Header from '../components/Header';
+import ChangeColor from './ChangeColor';
+import { useDispatch, useSelector } from 'react-redux';
+import { getList, addItem, delItem, updItem } from '../actions';
 
 export default function Home() {
     const [showAddTask, setShowAddTask] = useState(false)
@@ -19,7 +19,7 @@ export default function Home() {
             .then(initialTasks => {
                 dispatch(getList(initialTasks))
             })
-    }, [items])
+    }, [])
 
     // Add Task
     const addTask = (task) => {
@@ -36,6 +36,7 @@ export default function Home() {
             .remove(id, items)
             .then(() => {
                 dispatch(delItem(id));
+                dispatch(getList(items.filter(item => item.id !== id)));
             })
     }
 
@@ -53,6 +54,7 @@ export default function Home() {
                     .update(id, updTask)
                     .then(() => {
                         dispatch(updItem(id));
+                        dispatch(getList(items.map(item => item.id === id ? { ...item, reminder: !item.reminder } : item)));
                         // setTasks(tasks.map(task => task.id === id ? { ...task, reminder: !task.reminder } : task))
                     })
             })
