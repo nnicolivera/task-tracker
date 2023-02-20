@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { changeColor } from '../actions'
+import { changeColor } from '../store/actions'
 
 function ChangeColor() {
     const [color, setColor] = useState("");

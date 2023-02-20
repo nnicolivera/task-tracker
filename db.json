@@ -1,22 +1,16 @@
 {
   "tasks": [
     {
-      "text": "qweqw",
+      "text": "gg",
+      "date": "gg",
+      "reminder": true,
+      "id": 1
+    },
+    {
+      "text": "eqewq",
       "date": "ewqeqw",
-      "reminder": false,
-      "id": 4
-    },
-    {
-      "text": "ee",
-      "date": "ee",
-      "reminder": false,
-      "id": 5
-    },
-    {
-      "text": "rr",
-      "date": "rr",
-      "reminder": false,
-      "id": 6
+      "reminder": true,
+      "id": 2
     }
   ]
 }

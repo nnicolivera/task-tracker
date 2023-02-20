@@ -1,40 +1,41 @@
-import {useState} from 'react'
+import { useState } from 'react'
+import { useField } from './hooks/useField';
 
-export default function AddTask({onAdd}) {
-  const [text, setText] = useState('')
-  const [date, setDate] = useState('')
-  const [reminder, setReminder] = useState(false)
+export default function AddTask({ onAdd }) {
+  const text = useField('text');
+  const date = useField('text');
+  const [reminder, setReminder] = useState(false);
 
   const onSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
-    if(!text) {
-      alert('Please add a task')
-      return
+    if (!text.value) {
+      alert('Please add a task');
+      return;
     }
 
-    onAdd({text, date, reminder})
-    setText('')
-    setDate('')
-    setReminder(false)
+    onAdd({ text: text.value, date: date.value, reminder });
+    text.setValue('');
+    date.setValue('');
+    setReminder(false);
   }
 
   return (
     <form className='add-form' onSubmit={onSubmit}>
       <div className='form-control'>
         <label>Task</label>
-        <input type='text' placeholder='Add Task' value={text} onChange={(e) => setText(e.target.value)}/>
+        <input type={text.type} value={text.value} onChange={text.onChange} placeholder='Add Task' />
       </div>
-       <div className='form-control'>
+      <div className='form-control'>
         <label>Day & Time</label>
-        <input type='text' placeholder='Add Date' value={date} onChange={(e) => setDate(e.target.value)}/>
+        <input type={date.type} value={date.value} onChange={date.onChange} placeholder='Add Date' />
       </div>
-       <div className='form-control-check'>
+      <div className='form-control-check'>
         <label>Set Reminder</label>
-        <input type='checkbox' checked={reminder} value={reminder} onChange={(e) => setReminder(e.currentTarget.checked)}/>
+        <input type='checkbox' checked={reminder} value={reminder} onChange={(e) => setReminder(e.currentTarget.checked)} />
       </div>
 
-      <input type='submit' value='Save Task' className='btn btn-block'/>
+      <input type='submit' value='Save Task' className='btn btn-block' />
     </form>
   )
 }

@@ -20,8 +20,8 @@ export const addItem = item => {
     return { type: actions.ADD_ITEM, payload: item };
 }
 
-export const delItem = id => {
-    return { type: actions.DEL_ITEM, payload: id };
+export const delItem = (id, items) => {
+    return { type: actions.DEL_ITEM, payload: { id, items } };
 }
 
 export const updItem = id => {

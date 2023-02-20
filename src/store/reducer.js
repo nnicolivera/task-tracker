@@ -1,4 +1,4 @@
-import * as actions from './actionTypes'
+import * as actions from '../store/actionTypes'
 
 export default function reducer(state = { items: [] }, action) {
     switch (action.type) {
@@ -14,21 +14,24 @@ export default function reducer(state = { items: [] }, action) {
             };
         case actions.GET_ITEM:
             return {
-                items: [...state.items, state.items.filter(item => item.id === action.payload)]
+                items: [...state, state.items.filter(item => item.id === action.payload)]
             };
         case actions.ADD_ITEM:
             return {
                 items: [...state.items, action.payload]
             };
-        case actions.DEL_ITEM:
-            return {
-                items: [...state.items]
-            };
+        case actions.DEL_ITEM: {
+            return { ...state, items: state.items.filter(item => item.id !== action.payload.id) };
+        }
         case actions.UPD_ITEM:
             return {
-                items: [
-                    ...state.items
-                ],
+                ...state,
+                items: state.items.map(item => item.id === action.payload ?
+                    // transform the one with a matching id
+                    { ...item, reminder: !item.reminder } :
+                    // otherwise return original item
+                    item
+                )
             };
         case actions.RESET_LIST:
             return {
@@ -38,22 +41,3 @@ export default function reducer(state = { items: [] }, action) {
             return state;
     }
 }
-
-
-// export default function reducer(state = {}, action) {
-//     if (action.type === "color") {
-//         return {
-//             ...state,
-//             color: action.payload.color
-//         }
-//     }
-
-//     if (action.type === "getTasks") {
-//         return [
-//             ...state,
-//             { tasks: action.payload.tasks }
-//         ]
-//     }
-
-//     return { ...state }
-// }   

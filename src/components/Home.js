@@ -5,60 +5,60 @@ import taskService from '../services/tasks';
 import Header from '../components/Header';
 import ChangeColor from './ChangeColor';
 import { useDispatch, useSelector } from 'react-redux';
-import { getList, addItem, delItem, updItem } from '../actions';
+import { getList, addItem, delItem, updItem } from '../store/actions';
 
-export default function Home() {
+export const Home = () => {
     const [showAddTask, setShowAddTask] = useState(false)
 
     const dispatch = useDispatch()
     const items = useSelector(state => state.items)
 
     useEffect(() => {
-        taskService
-            .getAll()
-            .then(initialTasks => {
-                dispatch(getList(initialTasks))
-            })
+        const fetchTasks = async () => {
+            try {
+                const initialTasks = await taskService.getAll();
+                dispatch(getList(initialTasks));
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        fetchTasks();
     }, [])
 
     // Add Task
-    const addTask = (task) => {
-        taskService
-            .add(task)
-            .then(newTask => {
-                dispatch(addItem(newTask))
-            })
+    const addTask = async task => {
+        try {
+            const newTask = await taskService.add(task);
+            dispatch(addItem(newTask));
+        } catch (error) {
+            console.error(error);
+        }
     }
 
-    // Delete tasks
-    const deleteTask = (id) => {
-        taskService
-            .remove(id, items)
-            .then(() => {
-                dispatch(delItem(id));
-                dispatch(getList(items.filter(item => item.id !== id)));
-            })
+    // Delete task
+    const deleteTask = async id => {
+        try {
+            await taskService.remove(id, items);
+            dispatch(delItem(id, items));
+        } catch (error) {
+            console.error(error);
+        }
     }
 
-    // Toggle reminder
-    const toggleReminder = (id) => {
-        taskService
-            .get(id)
-            .then((taskToToggle) => {
-                const updTask = {
-                    ...taskToToggle,
-                    reminder: !taskToToggle.reminder
-                }
-
-                taskService
-                    .update(id, updTask)
-                    .then(() => {
-                        dispatch(updItem(id));
-                        dispatch(getList(items.map(item => item.id === id ? { ...item, reminder: !item.reminder } : item)));
-                        // setTasks(tasks.map(task => task.id === id ? { ...task, reminder: !task.reminder } : task))
-                    })
-            })
-    }
+    // Update task reminder
+    const toggleReminder = async (id) => {
+        try {
+            const taskToToggle = await taskService.get(id);
+            const updTask = {
+                ...taskToToggle,
+                reminder: !taskToToggle.reminder
+            };
+            await taskService.update(id, updTask);
+            dispatch(updItem(id));
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     return (
         <>
